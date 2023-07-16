@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Touchator revolutionizes mobile device detection, or not</title>
+
+    <meta
+      name="description"
+      content="Touchator helps you find out whether you have a mobile device such as a tablet or a smartphone."
+    />
+
+    <style>
+      @import 'https://unpkg.com/open-props';
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: grid;
+        justify-content: center;
+
+        margin: var(--size-4);
+
+        background-color: var(--gray-9);
+        color: var(--gray-0);
+        font-family: var(--font-sans);
+      }
+
+      h1 {
+        background: var(--gradient-3);
+        background-size: var(--size-relative-13) var(--size-relative-11);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: var(--font-size-8);
+        white-space: nowrap;
+        font-weight: var(--font-weight-5);
+      }
+
+      h2 {
+        font-size: var(--font-size-6);
+        font-weight: var(--font-weight-2);
+      }
+
+      p {
+        font-size: var(--font-size-4);
+        font-weight: var(--font-weight-9);
+      }
+
+      i {
+        color: initial;
+        font-size: var(--size-10);
+      }
+
+      li {
+        line-height: var(--font-lineheight-5);
+
+        border-left: solid var(--border-size-4);
+        background-color: var(--gray-8);
+        box-shadow: var(--shadow-2);
+        font-size: var(--font-size-4);
+        padding: var(--size-3);
+        margin-block: var(--size-3);
+      }
+
+      li::first-letter {
+        text-transform: uppercase;
+      }
+
+      .media-features {
+        list-style: none;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1><i>📱</i> Touchator</h1>
+
+      <h2>Do I have a mobile device?</h2>
+
+      <p class="result"></p>
+
+      <ul class="media-features"></ul>
+    </main>
+    <script>
+      const mediaFeatures = [
+        '(pointer: coarse)',
+        '(pointer: fine)',
+        '(pointer: none)',
+        '(any-pointer: coarse)',
+        '(any-pointer: fine)',
+        '(any-pointer: none)',
+        '(hover: hover)',
+        '(hover: none)',
+        '(any-hover: hover)',
+        '(any-hover: none)',
+      ];
+      const results = [
+        'Your device is likely a mobile device',
+        'Your device is likely a desktop device',
+      ];
+      const fragment = document.createDocumentFragment();
+
+      let isMobileDevice =
+        window.matchMedia(mediaFeatures[0]).matches &&
+        window.matchMedia(mediaFeatures[3]).matches;
+
+      mediaFeatures.forEach((mediaFeature) => {
+        const matches = window.matchMedia(mediaFeature).matches;
+        const match = mediaFeature.includes('coarse') && matches;
+
+        const li = document.createElement('li');
+
+        li.textContent = `${mediaFeature} ${matches ? 'YES' : 'NO'}`.replace(
+          /\(|\)|:/g,
+          ''
+        );
+
+        li.style.borderColor = match ? 'var(--lime-5)' : 'var(--red-6)';
+
+        fragment.appendChild(li);
+      });
+
+      document.querySelector('.result').style.color = isMobileDevice
+        ? 'var(--lime-5)'
+        : 'var(--red-6)';
+      document.querySelector('.result').textContent = isMobileDevice
+        ? results[0]
+        : results[1];
+
+      document.querySelector('.media-features').appendChild(fragment);
+    </script>
+  </body>
+</html>
